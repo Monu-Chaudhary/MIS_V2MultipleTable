@@ -39,7 +39,7 @@ namespace MIS_V2_MultipleTables.Member.DLL
             {
                 connect.Close();
             }
-            return "Sucessfully Saved";
+            return "Sucessfully Saved employee";
         }
 
         public List<ATTEmployee> GetEmployee(int? empID)

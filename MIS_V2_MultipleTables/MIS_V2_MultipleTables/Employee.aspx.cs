@@ -146,6 +146,8 @@ namespace MIS_V2_MultipleTables
             BLLEmployee objbllemp = new BLLEmployee();
             string msg = objbllemp.SaveEmployee(objAttEmp);
 
+            BLLQualification objbllqual = new BLLQualification();
+            string ms = objbllqual.SaveQualification(objAttEmp.Qual);
         }
 
         protected void DOB_SelectionChanged(object sender, EventArgs e)
