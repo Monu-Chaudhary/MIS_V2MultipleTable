@@ -127,6 +127,7 @@
     </Compile>
     <Compile Include="Member.ATT\ATTQualification.cs" />
     <Compile Include="Member.ATT\ATTQualificationList.cs" />
+    <Compile Include="Member.ATT\ATTUser.cs" />
     <Compile Include="Member.BLL\BLLEmployee.cs" />
     <Compile Include="Member.BLL\BLLQualification.cs" />
     <Compile Include="Member.BLL\BLLQualificationList.cs" />

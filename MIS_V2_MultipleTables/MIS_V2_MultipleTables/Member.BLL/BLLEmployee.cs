@@ -9,13 +9,45 @@ namespace MIS_V2_MultipleTables.Member.BLL
 {
     public class BLLEmployee
     {
-        public string SaveEmployee(ATTEmployee objEmployee)
+        public bool SaveEmployee(ATTEmployee objEmployee)
         {
-            string msg = "";
+            bool msg = false;
             try
             {
                 DLLEmployee dlEmployee = new DLLEmployee();
                 msg = dlEmployee.SaveEmployee(objEmployee);
+            }
+            catch (Exception ex)
+            {
+                throw(ex);
+            }
+            return msg;
+        }
+
+        public ATTEmployee GetEmployee(int empID)
+        {
+            ATTEmployee obj = new ATTEmployee();
+            try
+            {
+                DLLEmployee dlEmployee = new DLLEmployee();
+                obj = dlEmployee.GetEmployee(empID);
+            }
+            catch (Exception ex)
+            {
+                string msg = ex.Message;
+               // throw (ex);
+            }
+            return obj;
+        }
+
+        public string deleteEmployee(int EmpID)
+        {
+            string msg = "";
+
+            try
+            {
+                DLLEmployee objdllEmp = new DLLEmployee();
+                msg = objdllEmp.deleteEmployee(EmpID);
             }
             catch (Exception ex)
             {
@@ -24,20 +56,5 @@ namespace MIS_V2_MultipleTables.Member.BLL
             return msg;
         }
 
-        public List<ATTEmployee> GetEmployee(int? empID)
-        {
-            List<ATTEmployee> lst = new List<ATTEmployee>();
-            try
-            {
-                DLLEmployee dlEmployee = new DLLEmployee();
-                lst = dlEmployee.GetEmployee(empID);
-            }
-            catch (Exception ex)
-            {
-                string msg = ex.Message;
-               // throw (ex);
-            }
-            return lst;
-        }
     }
 }

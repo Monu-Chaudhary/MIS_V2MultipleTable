@@ -1,4 +1,4 @@
-﻿<%@ Page Language="C#" AutoEventWireup="true" CodeBehind="Employee.aspx.cs" Inherits="MIS_V2_MultipleTables.Employee" %>
+﻿<%@ Page Language="C#" AutoEventWireup="true" CodeBehind="Employee.aspx.cs" Inherits="MIS_V2_MultipleTables.Employee" EnableEventValidation="false" %>
 
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 
@@ -12,7 +12,8 @@
         <table>
             <tr>
                 <td>Employee ID</td>
-                <td><asp:TextBox ID="EID" placeholder="Employee ID" runat="server"></asp:TextBox></td>
+                <td><asp:TextBox ID="EID" placeholder="Employee ID" runat="server" 
+                        ontextchanged="EID_TextChanged"></asp:TextBox></td>
             </tr>
             <tr>
                 <td>Employee Name</td>
@@ -54,7 +55,9 @@
                 <td><asp:Button ID="BtnAdd" Text="Add" runat="server" onclick="BtnAdd_Click" ></asp:Button></td>
             </tr>
         </table>
-        <asp:GridView ID="GridView1" runat="server" AutoGenerateColumns="False" >
+        <asp:GridView ID="GridView1" runat="server" AutoGenerateColumns="False" 
+            onrowdatabound="GridView1_RowDataBound" 
+            onselectedindexchanged="GridView1_SelectedIndexChanged" >
             <Columns>
                 <asp:BoundField DataField="QualID" HeaderText="QualID" />
                 <asp:BoundField DataField="QualName" HeaderText="QualName" />
@@ -62,8 +65,14 @@
             </Columns>
         </asp:GridView>
         <asp:Label ID="LblRowindex" runat="server" Visible="False" ></asp:Label>
+        <asp:Label ID="lblEmpAction" runat="server" Text="lblEmpAction" Visible="false"></asp:Label>
         <p><asp:Button ID="btnSave" runat="server" text="Save" style="margin-left:30px" 
-                onclick="btnSave_Click"/><asp:Button runat="server" style="margin-left:30px" Text="Cancel" /></p>
+                onclick="btnSave_Click"/>
+                <asp:Button ID="btnCancle" runat="server" style="margin-left:30px" 
+                Text="Cancel" onclick="btnCancle_Click" />
+                <asp:Button ID ="btnDelete" runat = "server" Text = "Delete" style="margin-left:30px"
+            onclick="btnDelete_Click" Visible="False" />
+            </p>
     </div>
     </form>
 </body>

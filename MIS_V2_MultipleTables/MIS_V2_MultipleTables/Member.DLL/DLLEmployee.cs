@@ -11,7 +11,7 @@ namespace MIS_V2_MultipleTables.Member.DLL
 {
     public class DLLEmployee
     {
-        public string SaveEmployee(ATTEmployee objEmployee)
+        public bool SaveEmployee(ATTEmployee objEmployee)
         {
             string connectionstring = ConfigurationManager.ConnectionStrings["DB"].ConnectionString;
             SqlConnection connect = new SqlConnection(connectionstring);
@@ -39,15 +39,15 @@ namespace MIS_V2_MultipleTables.Member.DLL
             {
                 connect.Close();
             }
-            return "Sucessfully Saved employee";
+            return true;
         }
 
-        public List<ATTEmployee> GetEmployee(int? empID)
+        public ATTEmployee GetEmployee(int empID)
         {
             string connectionstring = ConfigurationManager.ConnectionStrings["DB"].ConnectionString;
             SqlConnection connect = new SqlConnection(connectionstring);
 
-            List<ATTEmployee> lst = new List<ATTEmployee>();
+            ATTEmployee obj = new ATTEmployee();
             DataSet ds = new DataSet();
             try
             {
@@ -57,19 +57,24 @@ namespace MIS_V2_MultipleTables.Member.DLL
                 cmd.Parameters.Add("@EmpID", SqlDbType.Int).Value = empID;
                 SqlDataAdapter da = new SqlDataAdapter(cmd);
                 da.Fill(ds, "Employee");
-
-                foreach (DataRow drow in ds.Tables[0].Rows)
+                if ((ds.Tables[0].Rows.Count) > 0)
                 {
-                    ATTEmployee obj = new ATTEmployee();
-                    obj.EmpID = Int32.Parse(drow["EmpID"].ToString());
-                    obj.EmpName = drow["EmpName"].ToString();
-                    obj.EmpEmail = drow["EmpEmail"].ToString();
-                    obj.EmpAddress = drow["EmpAddress"].ToString();
-                    obj.EmpPhone = drow["EmpPhone"].ToString();
-                    obj.EmpDOB = drow["EmpDOB"].ToString();
-                    obj.EmpGender = drow["EmpGender"].ToString();
-                    obj.action = "";
-                    lst.Add(obj);
+                    DataRow drow = ds.Tables[0].Rows[0];
+                    {
+
+                        obj.EmpID = Int32.Parse(drow["EmpID"].ToString());
+                        obj.EmpName = drow["EmpName"].ToString();
+                        obj.EmpEmail = drow["EmpEmail"].ToString();
+                        obj.EmpAddress = drow["EmpAddress"].ToString();
+                        obj.EmpPhone = drow["EmpPhone"].ToString();
+                        obj.EmpDOB = drow["EmpDOB"].ToString();
+                        obj.EmpGender = drow["EmpGender"].ToString();
+                        obj.action = "E";
+                    }
+                }
+                else
+                {
+                    obj.action = "A";
                 }
             }
             catch (Exception ex)
@@ -80,7 +85,31 @@ namespace MIS_V2_MultipleTables.Member.DLL
             {
                 connect.Close();
             }
-            return lst;
+            return obj;
         }
+        public string deleteEmployee(int? EmpID)
+        {
+            string connectionstring = ConfigurationManager.ConnectionStrings["DB"].ConnectionString ;
+            SqlConnection connect = new SqlConnection(connectionstring) ;
+
+            try
+            {
+                connect.Open();
+                SqlCommand cmd = new SqlCommand("ups_Employee_Delete", connect);
+                cmd.CommandType = CommandType.StoredProcedure;
+                cmd.Parameters.Add("@EmpID", SqlDbType.Int, 50).Value = EmpID;
+                cmd.ExecuteNonQuery();
+            }
+            catch (Exception ex)
+            {
+                throw (ex);
+            }
+            finally
+            {
+                connect.Close();
+            }
+            return "deleted sucessfully";
+        }
+
     }
 }

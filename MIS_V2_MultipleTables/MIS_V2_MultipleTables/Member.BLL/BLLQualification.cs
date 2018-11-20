@@ -9,9 +9,9 @@ namespace MIS_V2_MultipleTables.Member.BLL
 {
     public class BLLQualification
     {
-        public string SaveQualification (List<ATTQualification> objATTQual)
+        public bool SaveQualification (List<ATTQualification> objATTQual)
         {
-            string msg = "";
+            bool msg = false;
             try
             {
                 DLLQualification objqual = new DLLQualification();
@@ -22,10 +22,39 @@ namespace MIS_V2_MultipleTables.Member.BLL
             }
             catch(Exception ex)
             {
-                msg = ex.Message;
+                throw(ex);
             }
             return msg;
         }
-        
+
+        public List<ATTUser> SelectQualification(int EID)
+        {
+            List<ATTUser> lst = new List<ATTUser>();
+            try
+            {
+                DLLQualification objdllQual = new DLLQualification();
+                lst = objdllQual.SelectQualification(EID);
+            }
+            catch (Exception ex)
+            {
+                throw (ex);
+            }
+            return lst;
+        }
+
+        public bool deleteQual(int EID)
+        {
+            bool msg = false;
+            try
+            {
+                DLLQualification objdllQual = new DLLQualification();
+                msg = objdllQual.deleteQual(EID);
+            }
+            catch(Exception ex)
+            {
+                throw (ex);
+            }
+            return msg;
+        }
     }
 }
