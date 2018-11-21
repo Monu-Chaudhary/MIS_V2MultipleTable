@@ -40,9 +40,9 @@ namespace MIS_V2_MultipleTables.Member.BLL
             return obj;
         }
 
-        public string deleteEmployee(int EmpID)
+        public bool deleteEmployee(int EmpID)
         {
-            string msg = "";
+            bool msg = false;
 
             try
             {
@@ -51,7 +51,7 @@ namespace MIS_V2_MultipleTables.Member.BLL
             }
             catch (Exception ex)
             {
-                msg = ex.Message;
+                throw(ex);
             }
             return msg;
         }

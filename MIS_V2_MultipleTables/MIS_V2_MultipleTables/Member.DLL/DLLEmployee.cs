@@ -87,7 +87,7 @@ namespace MIS_V2_MultipleTables.Member.DLL
             }
             return obj;
         }
-        public string deleteEmployee(int? EmpID)
+        public bool deleteEmployee(int? EmpID)
         {
             string connectionstring = ConfigurationManager.ConnectionStrings["DB"].ConnectionString ;
             SqlConnection connect = new SqlConnection(connectionstring) ;
@@ -108,7 +108,7 @@ namespace MIS_V2_MultipleTables.Member.DLL
             {
                 connect.Close();
             }
-            return "deleted sucessfully";
+            return true;
         }
 
     }

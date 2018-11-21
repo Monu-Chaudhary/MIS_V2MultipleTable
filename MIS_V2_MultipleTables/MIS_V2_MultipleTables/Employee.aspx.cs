@@ -45,10 +45,11 @@ namespace MIS_V2_MultipleTables
             lblEmpAction.Text = "A";
 
             DataTable dt = new DataTable();
-            DataRow dr = null;
+            DataRow dr;
             dt.Columns.Add(new DataColumn("QualID", typeof(string)));
             dt.Columns.Add(new DataColumn("QualName", typeof(string)));
             dt.Columns.Add(new DataColumn("Marks", typeof(string)));
+            dr = null;
             dr = dt.NewRow();
             dr["QualID"] = string.Empty;
             dr["QualName"] = string.Empty;
@@ -59,23 +60,20 @@ namespace MIS_V2_MultipleTables
 
             GridView1.DataSource = dt;
             GridView1.DataBind();
-
         }
 
         protected void BtnAdd_Click(object sender, EventArgs e)
         {
-            if(lblEmpAction.Text == "A")
-                AddNewRowToGrid();
+            AddNewRowToGrid();
          }
 
         private void AddNewRowToGrid()
         {
-
+            GridView1.Visible = true;
             int i = Int32.Parse(LblRowindex.Text);
-            //Response.Write(rowIndex);
             if (ViewState["CurrentTable"] != null )
             {
-                DataTable dtCurrentTable = (DataTable) ViewState["CurrentTable"];
+                DataTable dtCurrentTable = (DataTable)ViewState["CurrentTable"];
                 DataRow drCurrentRow = null;
                 if (dtCurrentTable.Rows.Count>0 )
                 {
@@ -86,26 +84,31 @@ namespace MIS_V2_MultipleTables
                         if ( dr["QualID"].ToString() == DrpDn.SelectedValue.ToString() )
                             ifExists = true;
                     }
-
-                    if(!ifExists)    
+                    if ((TBMarks.Text) !=  string.Empty)
+                    {
+                        if (!ifExists)
                         {
                             string ID = DrpDn.SelectedValue.ToString();
+                            //////////
+                            drCurrentRow = dtCurrentTable.NewRow();
+                            dtCurrentTable.Rows.Add(drCurrentRow);
+                            /////////
                             dtCurrentTable.Rows[i]["QualID"] = DrpDn.SelectedValue.ToString();
                             dtCurrentTable.Rows[i]["QualName"] = DrpDn.SelectedItem.ToString();
                             dtCurrentTable.Rows[i]["Marks"] = TBMarks.Text;
-                            drCurrentRow = dtCurrentTable.NewRow();
+                            //drCurrentRow = dtCurrentTable.NewRow();
                             i++;
                             LblRowindex.Text = i.ToString();
 
-                            dtCurrentTable.Rows.Add(drCurrentRow);
+                            //dtCurrentTable.Rows.Add(drCurrentRow);
                             ViewState["CurrentTable"] = dtCurrentTable;
 
                             GridView1.DataSource = dtCurrentTable;
                             GridView1.DataBind();
                         }
-                    else if (ifExists) //&& EditQual.Text == "true")
-                    {
-                        for (int j = 0; j < dtCurrentTable.Rows.Count; j++ )
+                        else if (ifExists) //&& EditQual.Text == "true")
+                        {
+                            for (int j = 0; j < dtCurrentTable.Rows.Count; j++)
                             //foreach (DataRow dr in dtCurrentTable.Rows)
                             {
                                 if (dtCurrentTable.Rows[j]["QualID"].ToString() == DrpDn.SelectedValue.ToString())
@@ -125,6 +128,7 @@ namespace MIS_V2_MultipleTables
                                     GridView1.DataBind();
                                 }
                             }
+                        }
                     }
                 }
             }
@@ -172,6 +176,7 @@ namespace MIS_V2_MultipleTables
                 //Response.Write(objAttEmp.Qual);
             }
             DOB.Visible = true;
+            tbDOB.Visible = false;
             BLLEmployee objbllemp = new BLLEmployee();
             bool msg = objbllemp.SaveEmployee(objAttEmp);
 
@@ -184,7 +189,7 @@ namespace MIS_V2_MultipleTables
             if (ms == false)
             {
                 //Response.Write("Qualification Error");
-                string message = objbllemp.deleteEmployee(objAttEmp.EmpID);
+                bool message = objbllemp.deleteEmployee(objAttEmp.EmpID);
                 Response.Write("<script>alert('Not sucessfully saved. Enter the Qualification')</script>");
             }
             else
@@ -193,6 +198,7 @@ namespace MIS_V2_MultipleTables
                 
             }
 
+            //Response.Redirect("Employee.aspx");
             EID.Text = "";
             EName.Text = "";
             EPhone.Text = "";
@@ -208,6 +214,7 @@ namespace MIS_V2_MultipleTables
         {
             tbDOB.Text = DOB.SelectedDate.ToString("yyyy-MM-dd");
             DOB.Visible = false;
+            tbDOB.Visible = true;
         }
 
         protected void GridView1_SelectedIndexChanged(object sender, EventArgs e)
@@ -235,9 +242,9 @@ namespace MIS_V2_MultipleTables
 
             ATTEmployee objemp = new ATTEmployee();
             objemp.action = "A";
-            
+
             objemp = objbllEmp.GetEmployee(eid);
-            
+
             if (objemp.action == "E")
             {
                 lblEmpAction.Text = "E";
@@ -256,17 +263,41 @@ namespace MIS_V2_MultipleTables
                 //tbDOB.Text = DOB.SelectedDate.ToString("yyyy-MM-dd");
                 tbDOB.Text = DateTime.Parse(objemp.EmpDOB).ToString("yyyy-MM-dd");
                 DOB.Visible = false;
-                
+                tbDOB.Visible = true;
                 btnDelete.Visible = true;
-                BtnAdd.Visible = false;
+                BtnAdd.Text = "Edit";
+                //BtnAdd.Visible = false;
                 btnSave.Visible = false;
+                GridView1.Visible = true;
+                btnUpdate.Visible = true;
 
                 BLLQualification objbllQual = new BLLQualification();
                 List<ATTUser> list;
 
                 list = objbllQual.SelectQualification(eid);
+
+                DataTable dt = new DataTable();
+                dt.Columns.Add("QualID", typeof(string));
+                dt.Columns.Add("QualName", typeof(string));
+                dt.Columns.Add("Marks", typeof(string));
+                DataRow dr;
+                int i = 0;
+                foreach (ATTUser user in list)
+                {
+                    dr = dt.NewRow();
+                    dr["QualID"] = user.QualID.ToString();
+                    dr["QualName"] = user.QualName.ToString();
+                    dr["Marks"] = user.Marks.ToString();
+                    dt.Rows.Add(dr);
+                    i++;
+                    LblRowindex.Text = i.ToString();
+                }
+                ViewState["CurrentTable"] = dt;
+
+
                 GridView1.DataSource = list;
                 GridView1.DataBind();
+
             }
             else if (objemp.action == "A")
             {
@@ -278,14 +309,18 @@ namespace MIS_V2_MultipleTables
                 TBMarks.Text = "";
 
                 DOB.Visible = true;
+                tbDOB.Visible = false;
+                //BtnAdd.Visible = true;
                 btnDelete.Visible = false;
+                btnSave.Visible = true;
+                GridView1.Visible = false;
+                //btnUpdate.Visible = false;
                 SetInitialRow();
-            } 
-        }
+            }
 
-        protected void btnCancle_Click(object sender, EventArgs e)
-        {
-            Response.Redirect("Employee.aspx");
+            //TODO
+            //lblUpdate.Text = "Update";
+            //SetInitialRow();
         }
 
         protected void btnDelete_Click(object sender, EventArgs e)
@@ -296,10 +331,101 @@ namespace MIS_V2_MultipleTables
             if (msg == true)
             {
                 BLLEmployee objbllEmp = new BLLEmployee();
-                string ms = objbllEmp.deleteEmployee(int.Parse(EID.Text.ToString()));
+                bool ms = objbllEmp.deleteEmployee(int.Parse(EID.Text.ToString()));
                 Response.Write("<script>alert" + ms + "</script>");
                 Response.Redirect("Employee.aspx");
             }
+        }
+
+        protected void btnCancle_Click(object sender, EventArgs e)
+        {
+            Response.Redirect("Employee.aspx");
+        }
+
+        protected void btnUpdate_Click(object sender, EventArgs e)
+        {
+            ATTEmployee objAttEmp = new ATTEmployee();
+            objAttEmp.EmpID = int.Parse(EID.Text.ToString());
+
+            BLLQualification objbllQual = new BLLQualification();
+            bool mg = objbllQual.deleteQual(int.Parse(EID.Text.ToString()));
+            if (mg == true)
+            {
+                BLLEmployee objbllEmp = new BLLEmployee();
+                bool ms = objbllEmp.deleteEmployee(int.Parse(EID.Text.ToString()));
+            }
+
+            objAttEmp.EmpName = EName.Text.ToString();
+            objAttEmp.EmpPhone = EPhone.Text;
+            objAttEmp.EmpEmail = EEmail.Text;
+            if (RadMale.Checked)
+                objAttEmp.EmpGender = "Male";
+            else if (RadFemale.Checked)
+                objAttEmp.EmpGender = "Female";
+            else
+                objAttEmp.EmpGender = "Others";
+            objAttEmp.EmpDOB = tbDOB.Text;
+            objAttEmp.EmpAddress = EAdd.Text;
+
+            foreach (GridViewRow row in GridView1.Rows)
+            {
+                ATTQualification qual = new ATTQualification();
+                qual.EmpID = int.Parse(EID.Text.ToString());
+                if (row.Cells[0].Text == "&nbsp;")
+                {
+                    break;
+                }
+                else
+                {
+                    qual.QualID = Convert.ToInt32(row.Cells[0].Text);
+                }
+                qual.Marks = (row.Cells[2].Text);
+                qual.Action = "";
+                objAttEmp.Qual.Add(qual);
+                //Response.Write(objAttEmp.Qual);
+            }
+
+            if (mg == true)
+            {
+                BLLEmployee objbllemp = new BLLEmployee();
+                bool msg = objbllemp.SaveEmployee(objAttEmp);
+
+                bool ms = false;
+                if (msg == true)
+                {
+                    BLLQualification objbllqual = new BLLQualification();
+                    ms = objbllqual.SaveQualification(objAttEmp.Qual);
+
+                    if (ms == false)
+                    {
+                        //Response.Write("Qualification Error");
+                        bool message = objbllemp.deleteEmployee(objAttEmp.EmpID);
+                        Response.Write("<script>alert('Not sucessfully updated. Enter the Qualification')</script>");
+                    }
+                    else
+                    {
+                        Response.Write("<script>alert('successfully updated into DB')</script>");
+
+                    }
+                }
+            }
+            
+
+            Response.Redirect("Employee.aspx");
+            //EID.Text = "";
+            //EName.Text = "";
+            //EPhone.Text = "";
+            //EEmail.Text = "";
+            //EAdd.Text = "";
+            //tbDOB.Text = "";
+            //TBMarks.Text = "";
+
+            //DOB.Visible = true;
+            //tbDOB.Visible = false;
+            //btnUpdate.Visible = false;
+            //BtnAdd.Text = "Add";
+
+            //SetInitialRow();
         }
     }
 }
