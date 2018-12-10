@@ -5,8 +5,13 @@
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en">
 <head runat="server">
     <title>Employee</title>
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css"/>
-    <style type="text/css">
+    <link href="Content/bootstrap.min.css" rel="stylesheet" type="text/css" />
+    <script src="Scripts/jquery-3.0.0.min.js" type="text/javascript"></script>
+    <script src="Scripts/bootstrap.min.js" type="text/javascript"></script>
+    <script src="Scripts/popper.min.js" type="text/javascript"></script>
+    <script type="text/javascript" src="Scripts/Validation.js"></script>
+
+<style type="text/css">
         .data
         {
             padding: 5px 5px 5px 5px;
@@ -60,7 +65,7 @@
                     </tr>
                     <tr>
                         <td class="data">Employee Gender</td>
-                        <td class="data"><asp:RadioButton ID="RadMale" Text="Male" runat="server" GroupName="Gender"></asp:RadioButton> 
+                        <td class="data"><asp:RadioButton ID="RadMale" Text="Male" runat="server" GroupName="Gender" Checked></asp:RadioButton> 
                             <asp:RadioButton ID="RadFemale" Text="Female" runat="server" GroupName="Gender"></asp:RadioButton> 
                             <asp:RadioButton ID="Radothers" Text="Others" runat="server" GroupName="Gender"></asp:RadioButton> </td>
                     </tr>
@@ -88,19 +93,44 @@
                         <asp:BoundField DataField="Marks" HeaderText="Marks" />
                     </Columns>
                 </asp:GridView>
+                <asp:ListBox ID="ListBox1" runat="server" 
+                    onselectedindexchanged="ListBox1_SelectedIndexChanged" ForeColor="#6600FF" 
+                    Height="200px" Rows="8" Width="100px">
+                    <asp:ListItem Value="EmpName">Name</asp:ListItem>
+                </asp:ListBox>
                 <asp:Label ID="LblRowindex" runat="server" Visible="False" ></asp:Label>
                 <asp:Label ID="lblEmpAction" runat="server" Text="lblEmpAction" Visible="false"></asp:Label>
             </div>
         </div>
         <div class="row">
-            <p  align="right">
-                <asp:Button ID="btnSave" runat="server" text="Save" style="margin-left:30px; background-color:#22529e; color:White; border:none; margin:12px; padding:6px 16px 6px 16px" onclick="btnSave_Click"/>
+            <div class="col-md-12">
+                <p  align="center">
+                <asp:Button ID="btnSave" runat="server" text="Save" style="margin-left:30px; background-color:#22529e; color:White; border:none; margin:12px; padding:6px 16px 6px 16px" onclick="btnSave_Click" OnClientClick = "return userValidation();"/>
                         <asp:Button ID="btnCancle" runat="server" style="margin-left:30px; background-color:#22529e; color:White; border:none; margin:12px; padding:6px 16px 6px 16px" Text="Cancel" onclick="btnCancle_Click" />
                         <asp:Button ID="btnUpdate" runat="server" 
                     style="margin-left:30px; background-color:#22529e; color:White; border:none; margin:12px; padding:6px 16px 6px 16px" 
                     Text="Update" visible="false" onclick="btnUpdate_Click"/>
                         <asp:Button ID ="btnDelete" runat = "server" Text = "Delete" style="margin-left:30px; background-color:#22529e; color:White; border:none; margin:12px; padding:6px 16px 6px 16px" onclick="btnDelete_Click" Visible="False" />
             </p>
+            </div>
+            <div class="row">
+                <div class="col-md-12">
+                    <asp:GridView ID="GridViewEmp" runat="server" 
+                        onselectedindexchanged="EmployeeGrid_SelectedIndexChanged" 
+                        AutoGenerateColumns="False" DataKeyNames="EmpID">
+                        <Columns>
+                            <asp:BoundField DataField="EmpID" HeaderText="ID" />
+                            <asp:BoundField DataField="EmpName" HeaderText="Name" />
+                            <asp:BoundField DataField="EmpAddress" HeaderText="Address" />
+                            <asp:BoundField DataField="EmpEmail" HeaderText="Email" />
+                            <asp:BoundField DataField="EmpPhone" HeaderText="Phone" />
+                            <asp:BoundField DataField="EmpDOB" HeaderText="DOB" />
+                            <asp:BoundField DataField="EmpGender" HeaderText="Gender" />
+                            <asp:CommandField ShowSelectButton="True" />
+                        </Columns>
+                    </asp:GridView>
+                </div>
+            </div>
         </div>
     </div>
     <p align="right">
