@@ -24,20 +24,20 @@ namespace MIS_V2_MultipleTables.Member.BLL
             return msg;
         }
 
-        public ATTEmployee GetEmployee(int empID)
+        public List<ATTEmployee> GetEmployee(int? empID)
         {
-            ATTEmployee obj = new ATTEmployee();
+            List<ATTEmployee> lst = new List<ATTEmployee>();
             try
             {
                 DLLEmployee dlEmployee = new DLLEmployee();
-                obj = dlEmployee.GetEmployee(empID);
+                lst = dlEmployee.GetEmployee(empID);
             }
             catch (Exception ex)
             {
                 string msg = ex.Message;
                // throw (ex);
             }
-            return obj;
+            return lst;
         }
 
         public bool deleteEmployee(int EmpID)

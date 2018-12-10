@@ -7,7 +7,7 @@ namespace MIS_V2_MultipleTables.Member.ATT
 {
     public class ATTEmployee
     {
-        public int EmpID { get; set; }
+        public int EmpID { get; set; } //these are properties used to access the private field.
         public string EmpName { get; set; }
         public string EmpAddress { get; set; }
         public string EmpEmail { get; set; }

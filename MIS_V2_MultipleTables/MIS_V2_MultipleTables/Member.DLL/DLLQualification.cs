@@ -12,29 +12,32 @@ namespace MIS_V2_MultipleTables.Member.DLL
 {
     public class DLLQualification
     {
-        public bool Save_Qualification(ATTQualification objQual)
+        public bool Save_Qualification(List<ATTQualification> objQualL, SqlConnection connect, SqlTransaction trans)
         {
-            string connectionstring = ConfigurationManager.ConnectionStrings["DB"].ConnectionString;
-            SqlConnection connect = new SqlConnection(connectionstring);
+        //    string connectionstring = ConfigurationManager.ConnectionStrings["DB"].ConnectionString;
+        //    SqlConnection connect = new SqlConnection(connectionstring);
 
             try
             {
-                connect.Open();
-                SqlCommand cmd = new SqlCommand("dbo.usp_Qualification_Save", connect);
-                cmd.CommandType = CommandType.StoredProcedure;
-                cmd.Parameters.Add("@EmpID", SqlDbType.Int, 50).Value = objQual.EmpID;
-                cmd.Parameters.Add("@QualID", SqlDbType.Int, 50).Value = objQual.QualID;
-                cmd.Parameters.Add("@Marks", SqlDbType.Float, 50).Value = objQual.Marks;
-                cmd.ExecuteNonQuery();
+                foreach (var objQual in objQualL)
+                {
+                    //connect.Open();
+                    SqlCommand cmd = new SqlCommand("dbo.usp_Qualification_Save", connect, trans);
+                    cmd.CommandType = CommandType.StoredProcedure;
+                    cmd.Parameters.Add("@EmpID", SqlDbType.Int, 50).Value = objQual.EmpID;
+                    cmd.Parameters.Add("@QualID", SqlDbType.Int, 50).Value = objQual.QualID;
+                    cmd.Parameters.Add("@Marks", SqlDbType.Float, 50).Value = objQual.Marks;
+                    cmd.ExecuteNonQuery();
+                }
             }
             catch (Exception ex)
             {
                 throw (ex);
             }
-            finally
-            {
-                connect.Close();
-            }
+            //finally
+            //{
+            //    connect.Close();
+            //}
             return true;
         }
 

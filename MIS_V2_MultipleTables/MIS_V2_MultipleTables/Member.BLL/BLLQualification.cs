@@ -9,23 +9,24 @@ namespace MIS_V2_MultipleTables.Member.BLL
 {
     public class BLLQualification
     {
-        public bool SaveQualification (List<ATTQualification> objATTQual)
-        {
-            bool msg = false;
-            try
-            {
-                DLLQualification objqual = new DLLQualification();
-                foreach (ATTQualification objATTQuaification in objATTQual)
-                {
-                    msg = objqual.Save_Qualification(objATTQuaification);
-                }
-            }
-            catch(Exception ex)
-            {
-                throw(ex);
-            }
-            return msg;
-        }
+        //TODO the below function is redundant
+        //public bool SaveQualification (List<ATTQualification> objATTQual)
+        //{
+        //    bool msg = false;
+        //    try
+        //    {
+        //        DLLQualification objqual = new DLLQualification();
+        //        //foreach (ATTQualification objATTQuaification in objATTQual)
+        //        {
+        //            msg = objqual.Save_Qualification(objATTQual);
+        //        }
+        //    }
+        //    catch(Exception ex)
+        //    {
+        //        throw(ex);
+        //    }
+        //    return msg;
+        //}
 
         public List<ATTUser> SelectQualification(int EID)
         {
